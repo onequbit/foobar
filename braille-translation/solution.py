@@ -16,39 +16,34 @@ import string
 
 """
 
-
-
-
-def make_decoder():
-    alphabet_message = "The quick brown fox jumps over the lazy dog"
-    braille_message = "000001011110110010100010000000111110101001010100100100101000000000110000111010101010010111101110000000110100101010101101000000010110101001101100111100011100000000101010111001100010111010000000011110110010100010000000111000100000101011101111000000100110101010110110"
-    message_copy = ''
-    for char in alphabet_message:
-        if char in string.ascii_uppercase:
-            message_copy += '~'
-        message_copy += char             
-    braille_chars = {}
-    for index, char in enumerate(message_copy):
-        braille_dots = ''
-        for step in range(6):
-            char_position = (index * 6) + step
-            character = braille_message[char_position]
-            braille_dots += character
-        braille_chars[str(char).lower()] = braille_dots
-    return braille_chars
-
+# def make_decoder():
+#     alphabet_message = "The quick brown fox jumps over the lazy dog"
+#     braille_message = "000001011110110010100010000000111110101001010100100100101000000000110000111010101010010111101110000000110100101010101101000000010110101001101100111100011100000000101010111001100010111010000000011110110010100010000000111000100000101011101111000000100110101010110110"
+#     message_copy = ''
+#     for char in alphabet_message:
+#         if char in string.ascii_uppercase:
+#             message_copy += '~'
+#         message_copy += char             
+#     braille_chars = {}
+#     for index, char in enumerate(message_copy):
+#         braille_dots = ''
+#         for step in range(6):
+#             char_position = (index * 6) + step
+#             character = braille_message[char_position]
+#             braille_dots += character
+#         braille_chars[str(char).lower()] = braille_dots
+#     return braille_chars
+decoder = {'~': '000001', 't': '011110', 'h': '110010', 'e': '100010', ' ': '000000', 'q': '111110', 'u': '101001', 'i': '010100', 'c': '100100', 'k': '101000', 'b': '110000', 'r': '111010', 'o': '101010', 'w': '010111', 'n': '101110', 'f': '110100', 'x': '101101', 'j': '010110', 'm': '101100', 'p': '111100', 's': '011100', 'v': '111001', 'l': '111000', 'a': '100000', 'z': '101011', 'y': '101111', 'd': '100110', 'g': '110110'}
 
 def solution(s):
-    # Your code here
-    decoder = make_decoder()
     dots = ''
     for char in s:
         if char in string.ascii_uppercase:
             dots += decoder['~']
         dots += decoder[str(char).lower()]
     return dots
-
     
 if __name__ == "__main__":
-    
-    pass
+    print(solution(string.ascii_lowercase))
+    print()
+    print(solution(string.ascii_uppercase))

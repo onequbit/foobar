@@ -4,7 +4,10 @@ from solution import solution
 
 def run_test(input, expected_output):
     output = solution(input)
-    assert output == expected_output, f"expected: {expected_output} ... got: {output}"
+    print(input)
+    print(expected_output)
+    print(output)
+    # assert output == expected_output, f"expected: {expected_output} ... got: {output}"
 
 if __name__ == '__main__':
     success, message = [0]*3, [0]*3
