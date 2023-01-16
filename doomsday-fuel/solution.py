@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
+import json
+
 
 def matrix_to_str(matrix):
     str_rows = []
     for row in matrix:
         str_rows.append(str(row))
-    return '\n'.join(str_rows)
+    return '\n' + '\n'.join(str_rows)
 
 def get_denominators(matrix):
     denominators = [0] * len(matrix)
@@ -24,7 +26,6 @@ def get_probabilities(matrix):
             p_row.append((col, denominator))
         probabilities.append(p_row)
     return probabilities
-
     
 def get_endpoints(matrix):
     pass
@@ -44,36 +45,34 @@ def get_traces(matrix):
             traces[state_id] = s_next
     return traces
 
-def get_traces_2(matrix):
-    terminal_states = [s for s in range(len(matrix)) if sum(matrix[s]) == 0]
-    states = [s for s in range(len(matrix)) if s not in terminal_states]
-    transitions = {}
-    for t in terminal_states:
-        t_state = matrix[t]
-        for s_i, s in enumerate(t_state):
-            if s > 0:
-                transitions[str(t)] = ( str(s_i), s )
-    print("transitions", transitions)
-    return transitions
+def propagate_probabilities(matrix):
+    print("propagate_probabilities")
+    for row_num, row in enumerate(matrix):
+        for i, r in enumerate(row):
+            p,d = r
+            if p > 0:
+                p1, d1 = matrix[i][row_num]
+                print(f"p1: {p1}, d1: {d1}... ", end='')
+                p1 *= p / d
 
+                #  TO DO: Propagate this new probability into denominators
+                
+                matrix[i][row_num] = (p1, d1)
+                print(f"matrix[{i}][{row_num}]: {matrix[i][row_num]}, ", end='')
+        print()
+    return matrix
 
 def solution(m):
-    get_traces_2(m)
-    traces = get_traces(m)
-    print("traces:")
-    for s in traces.keys():
-        print({ s: traces[s]})
-    # Test 1: [7,6,8,21]
-    # Test 2: [0,3,2,9,14]
-    if len(m) == 5:
-        return [7,6,8,21]
-    if len(m) == 6:
-        return [0,3,2,9,14]
-
-
+    print(f"inputs:{matrix_to_str(m)}")
+    # if len(m) == 5:
+    #     return [7,6,8,21]
+    # if len(m) == 6:
+    #     return [0,3,2,9,14]
 
     p = get_probabilities(m)
-    print("p:\n", matrix_to_str(p))
+    print("p:", matrix_to_str(p))
+    p2 = propagate_probabilities(p)
+    print("p2:", matrix_to_str(p2))
     numerators = [0] * (len(m)-1)
 
     
@@ -85,7 +84,7 @@ def solution(m):
 def test(my_solution, inputs, expected = None):
     answer = my_solution(inputs)
     inputs = '\n' + matrix_to_str(inputs)
-    print(f"input:{inputs} ... answer: '{answer}', expected: '{expected}'")
+    print(f"... answer: '{answer}', expected: '{expected}'")
 
 if __name__=='__main__':
     print()
