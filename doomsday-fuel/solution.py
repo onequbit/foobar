@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import json
 
+from fractions import Fraction
 
 def matrix_to_str(matrix):
     str_rows = []
@@ -63,21 +64,44 @@ def propagate_probabilities(matrix):
     return matrix
 
 def solution(m):
-    print(f"inputs:{matrix_to_str(m)}")
+    # print(f"inputs:{matrix_to_str(m)}")
+    m2 = [[Fraction(number) for number in row] for row in m]
+    # print(f"inputs:{matrix_to_str(m2)}")
+    result_rows = []
+    denominators = []
+    for row_num, row in enumerate(m2):
+        d = sum([r.numerator for r in row])
+        # print(f"iteration:{row_num} --> m:{matrix_to_str(m2)}") 
+        for i, p in enumerate(row):
+            if p > 0:
+                c = Fraction(p,d)
+                n = m2[i][row_num].numerator * c
+                m2[i][row_num] = Fraction(n, 1)
+        d = sum([r.numerator for r in row])
+        if d > 0:
+            denominators.append(d)
+        else:
+            result_rows.append(row_num)
+        print(f"status m:{matrix_to_str(m)}")
+        print(f"status m2:{matrix_to_str(m2)}")
+    print(f"denominators:{denominators}")
+    print(f"result_rows:{result_rows}")
+    denominator = 1
+    for d in denominators:
+        denominator *= d
+    probabilities = []
+    
+    for row_num, row in enumerate(m):
+        for i, r in enumerate(row):
+            
+    print(f"probabilities:{probabilities}")
     # if len(m) == 5:
     #     return [7,6,8,21]
     # if len(m) == 6:
     #     return [0,3,2,9,14]
 
-    p = get_probabilities(m)
-    print("p:", matrix_to_str(p))
-    p2 = propagate_probabilities(p)
-    print("p2:", matrix_to_str(p2))
-    numerators = [0] * (len(m)-1)
-
     
-
-    return numerators + [-1] 
+    return probabilities + [denominator]
     
     
 
