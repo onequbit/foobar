@@ -9,27 +9,25 @@ def matrix_to_str(matrix):
         str_rows.append(str(row))
     return '\n' + '\n'.join(str_rows)
 
-def get_denominators(matrix):
-    denominators = [0] * len(matrix)
-    for row_num, row in enumerate(matrix):
-        denominators[row_num] = (sum(row))
-    return denominators
+# def get_denominators(matrix):
+#     denominators = [0] * len(matrix)
+#     for row_num, row in enumerate(matrix):
+#         denominators[row_num] = (sum(row))
+#     return denominators
 
-def get_probabilities(matrix):
-    denominators = get_denominators(matrix)
-    print(f"solution: denominators: {denominators}")
-    probabilities = []
-    for row_num, row in enumerate(matrix):
-        print(row_num, row)
-        p_row = []
-        denominator = denominators[row_num]
-        for col in row:
-            p_row.append((col, denominator))
-        probabilities.append(p_row)
-    return probabilities
-    
-def get_endpoints(matrix):
-    pass
+# def get_probabilities(matrix):
+#     denominators = get_denominators(matrix)
+#     print(f"solution: denominators: {denominators}")
+#     probabilities = []
+#     for row_num, row in enumerate(matrix):
+#         print(row_num, row)
+#         p_row = []
+#         denominator = denominators[row_num]
+#         for col in row:
+#             p_row.append((col, denominator))
+#         probabilities.append(p_row)
+#     return probabilities
+
     
 def get_traces(matrix):
     traces = {}
@@ -86,20 +84,26 @@ def solution(m):
         print(f"status m2:{matrix_to_str(m2)}")
     print(f"denominators:{denominators}")
     print(f"result_rows:{result_rows}")
+
     denominator = 1
     for d in denominators:
         denominator *= d
-    probabilities = []
+    probabilities = [0] * len(m)
+
+    m2 = m.copy()
     
-    for row_num, row in enumerate(m):
+    for row_num, row in enumerate(m2):
         for i, r in enumerate(row):
-            
-    print(f"probabilities:{probabilities}")
+            if r > 0:
+                
+
+                # m2[i][row_num] *= m[row_num][i]
+    print(f"new m:{matrix_to_str(m)}")
     # if len(m) == 5:
     #     return [7,6,8,21]
     # if len(m) == 6:
     #     return [0,3,2,9,14]
-
+    print(get_traces(m))
     
     return probabilities + [denominator]
     
