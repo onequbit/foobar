@@ -3,6 +3,7 @@ import json
 from functools import reduce
 import operator
 from fractions import Fraction
+import numpy as np
 
 def matrix_to_str(matrix):
     str_rows = []
@@ -34,10 +35,37 @@ def to_fractions(matrix):
     print(f"to_fractions: {denominators}\n{matrix_to_str(m2)}\n")
     return m2, denominators
 
+def numpy_cruft(m):
+    a = np.matrix(m)
+    print(a)
+    b = [[0 for _ in range(len(m))] for __ in range(len(m))]
+    for i in range(len(m)):
+        b[i][0] = 1
+    b = np.matrix(b)
+    # print(matrix_b)
+    c = np.matmul(a,b)
+    # print(c)
+    d = [[0 for _ in range(len(m))] for __ in range(len(m))]
+    for i in range(len(m)):
+        d[i][i] = 1
+    d = np.matrix(d)
+    e = np.matmul(a,d)
+    print(e)
+
+def np_denominators(m):
+    a = np.matrix(m)
+    b = [[0 for _ in range(len(m))] for __ in range(len(m))]
+    for i in range(len(m)):
+        b[i][0] = 1
+    b = np.matrix(b)
+    return np.matmul(a,b)
+
+
 def solution(m):
     if len(m) < 2:
         return [1,1] # passes hidden test 9
 
+    
     m2, denominators = to_fractions(m)    
     denominator = reduce(operator.mul, [d for d in denominators if d > 0])
     print(f"denominator: {denominator}")
@@ -83,8 +111,13 @@ def test(my_solution, inputs, expected = None):
 
 if __name__=='__main__':
     print()
-    test(solution, [[0, 2, 1, 0, 0], [0, 0, 0, 3, 4], [0, 0, 0, 0, 0], [0, 0, 0, 0,0], [0, 0, 0, 0, 0]], expected=[7, 6, 8, 21])
-    test(solution, [[0, 1, 0, 0, 0, 1], [4, 0, 0, 3, 2, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0]], [0, 3, 2, 9, 14])
+    
+    test_data_1 = [[0, 2, 1, 0, 0], [0, 0, 0, 3, 4], [0, 0, 0, 0, 0], [0, 0, 0, 0,0], [0, 0, 0, 0, 0]]
+    test_data_2 = [[0, 1, 0, 0, 0, 1], [4, 0, 0, 3, 2, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0]]
+    numpy_cruft(test_data_1)
+    numpy_cruft(test_data_2)
+    # test(solution, , expected=[7, 6, 8, 21])
+    # test(solution, [[0, 1, 0, 0, 0, 1], [4, 0, 0, 3, 2, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0]], [0, 3, 2, 9, 14])
     # test(solution, [[0, 1, 0, 0, 0, 1], [4, 0, 1, 3, 2, 0], [0, 0, 1, 1, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0]], [])
 
 """
