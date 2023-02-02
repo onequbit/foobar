@@ -14,11 +14,6 @@ def matrix_to_str(matrix):
         str_rows.append(row_str)
     return '\n' + '\n'.join(str_rows)
 
-
-
-from fractions import Fraction
-import operator
-
 def to_fractions(matrix):
     m2 = []
     denominators = []
@@ -58,13 +53,18 @@ def np_denominators(m):
     for i in range(len(m)):
         b[i][0] = 1
     b = np.matrix(b)
-    return np.matmul(a,b)
+    c = np.matmul(a,b).flatten()
+    result = []
+    for x,y in np.nonzero(c):
+        result.append(c[x,y])
+    return result
 
+def np_fraction_numerators(m):
+    return np.matrix(m)
 
 def solution(m):
     if len(m) < 2:
         return [1,1] # passes hidden test 9
-
     
     m2, denominators = to_fractions(m)    
     denominator = reduce(operator.mul, [d for d in denominators if d > 0])
@@ -105,17 +105,21 @@ def solution(m):
     
 
 def test(my_solution, inputs, expected = None):
-    answer = my_solution(inputs)
-    inputs = '\n' + matrix_to_str(inputs)
-    print(f"... answer: '{answer}', expected: '{expected}'")
+    # answer = my_solution(inputs)
+    # inputs = '\n' + matrix_to_str(inputs)
+    # print(f"... answer: '{answer}', expected: '{expected}'")
+    print(f"np_fraction_numerators(m): {np_fraction_numerators(inputs)}")
+    print(f"np_denominators(m): {np_denominators(inputs)}")
 
 if __name__=='__main__':
     print()
     
     test_data_1 = [[0, 2, 1, 0, 0], [0, 0, 0, 3, 4], [0, 0, 0, 0, 0], [0, 0, 0, 0,0], [0, 0, 0, 0, 0]]
     test_data_2 = [[0, 1, 0, 0, 0, 1], [4, 0, 0, 3, 2, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0]]
-    numpy_cruft(test_data_1)
-    numpy_cruft(test_data_2)
+    # numpy_cruft(test_data_1)
+    # numpy_cruft(test_data_2)
+    test(solution, test_data_1)
+    test(solution, test_data_2)
     # test(solution, , expected=[7, 6, 8, 21])
     # test(solution, [[0, 1, 0, 0, 0, 1], [4, 0, 0, 3, 2, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0]], [0, 3, 2, 9, 14])
     # test(solution, [[0, 1, 0, 0, 0, 1], [4, 0, 1, 3, 2, 0], [0, 0, 1, 1, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0]], [])
